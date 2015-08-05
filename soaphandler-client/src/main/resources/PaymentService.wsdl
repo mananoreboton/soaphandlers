@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:tns="http://service.server.soaphandlers.ws.borabora.com/"
+             xmlns="http://schemas.xmlsoap.org/wsdl/"
+             targetNamespace="http://service.server.soaphandlers.ws.borabora.com/" name="PaymentsServiceService">
+    <types>
+        <xs:schema xmlns:tns="http://service.server.soaphandlers.ws.borabora.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://service.server.soaphandlers.ws.borabora.com/">
+
+            <xs:element name="pay" type="tns:pay"/>
+
+            <xs:element name="payResponse" type="tns:payResponse"/>
+
+            <xs:complexType name="pay">
+                <xs:sequence>
+                    <xs:element name="arg0" type="tns:transaction" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="transaction">
+                <xs:sequence>
+                    <xs:element name="id" type="xs:long" minOccurs="0"/>
+                    <xs:element name="money" type="xs:double" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="payResponse">
+                <xs:sequence>
+                    <xs:element name="balance" type="tns:balance" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+
+            <xs:complexType name="balance">
+                <xs:sequence>
+                    <xs:element name="customer" type="xs:long" minOccurs="0"/>
+                    <xs:element name="money" type="xs:double" minOccurs="0"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </types>
+    <message name="pay">
+        <part name="parameters" element="tns:pay"/>
+    </message>
+    <message name="payResponse">
+        <part name="parameters" element="tns:payResponse"/>
+    </message>
+    <portType name="PaymentsService">
+        <operation name="pay">
+            <input wsam:Action="http://service.server.soaphandlers.ws.borabora.com/PaymentsService/payRequest"
+                   message="tns:pay"/>
+            <output wsam:Action="http://service.server.soaphandlers.ws.borabora.com/PaymentsService/payResponse"
+                    message="tns:payResponse"/>
+        </operation>
+    </portType>
+    <binding name="PaymentsServicePortBinding" type="tns:PaymentsService">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="pay">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="PaymentsServiceService">
+        <port name="PaymentsServicePort" binding="tns:PaymentsServicePortBinding">
+            <soap:address location="http://localhost:2205/"/>
+        </port>
+    </service>
+</definitions>
